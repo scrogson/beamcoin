@@ -12,5 +12,6 @@ crate-type = ["dylib"]
 rustler = { git = "https://github.com/hansihe/rustler", branch = "master" }
 rustler_codegen = { git = "https://github.com/hansihe/rustler", branch = "master" }
 lazy_static = "0.2"
-easy-hash = "0.1.0"
+num_cpus = "1.0"
 scoped-pool = "1.0.0"
+sha2 = "0.7"
