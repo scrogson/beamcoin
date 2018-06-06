@@ -9,8 +9,8 @@ path = "src/lib.rs"
 crate-type = ["dylib"]
 
 [dependencies]
-rustler = { git = "https://github.com/hansihe/rustler", branch = "master" }
-rustler_codegen = { git = "https://github.com/hansihe/rustler", branch = "master" }
+rustler = { git = "https://github.com/scrogson/rustler", branch = "workspaces" }
+rustler_codegen = { git = "https://github.com/scrogson/rustler", branch = "workspaces" }
 lazy_static = "0.2"
 num_cpus = "1.0"
 scoped-pool = "1.0.0"
