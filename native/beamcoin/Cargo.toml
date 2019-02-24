@@ -2,16 +2,19 @@
 name = "beamcoin"
 version = "0.1.0"
 authors = []
+edition = "2018"
 
 [lib]
 name = "beamcoin"
 path = "src/lib.rs"
-crate-type = ["dylib"]
+crate-type = ["cdylib"]
 
 [dependencies]
-rustler = { git = "https://github.com/hansihe/rustler", branch = "master" }
-rustler_codegen = { git = "https://github.com/hansihe/rustler", branch = "master" }
-lazy_static = "0.2"
+#rustler = "0.19"
+#rustler_codegen = "0.19"
+rustler = { path = "/home/scrogson/github/hansihe/rustler/rustler"}
+rustler_codegen = { path = "/home/scrogson/github/hansihe/rustler/rustler_codegen"}
+lazy_static = "1.2"
 num_cpus = "1.0"
 scoped-pool = "1.0.0"
 sha2 = "0.7"

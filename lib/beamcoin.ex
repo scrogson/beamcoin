@@ -1,10 +1,14 @@
 defmodule Beamcoin do
-  use Rustler, otp_app: :beamcoin
 
   require Logger
 
+  def demo do
+    Task.start(fn -> mine() end)
+  end
+
   def mine do
-    :ok = native_mine()
+    {:ok, resource} = Beamcoin.Server.get_resource()
+    :ok = Beamcoin.Native.mine(resource)
 
     start = System.system_time(:seconds)
     receive do
@@ -19,5 +23,7 @@ defmodule Beamcoin do
     end
   end
 
-  def native_mine, do: :erlang.nif_error(:nif_not_loaded)
+  def stop do
+    GenServer.stop(Beamcoin.Server)
+  end
 end

@@ -8,24 +8,16 @@ defmodule Beamcoin.Mixfile do
      start_permanent: Mix.env == :prod,
      compilers: [:rustler] ++ Mix.compilers(),
      deps: deps(),
-     rustler_crates: rustler_crates()]
+     rustler_crates: [beamcoin: []]]
   end
 
   def application do
-    [extra_applications: [:logger]]
+    [mod: {Beamcoin.Application, []},
+     extra_applications: [:logger]]
   end
 
   defp deps do
-    [{:rustler, github: "hansihe/rustler", sparse: "rustler_mix"}]
+    #[{:rustler, "~> 0.19"}]
+    [{:rustler, path: "/home/scrogson/github/hansihe/rustler/rustler_mix"}]
   end
-
-  defp rustler_crates do
-    [beamcoin: [
-      path: "native/beamcoin",
-      mode: mode(Mix.env)
-    ]]
-  end
-
-  defp mode(:prod), do: :release
-  defp mode(_), do: :debug
 end
