@@ -17,7 +17,6 @@ defmodule Beamcoin.Mixfile do
   end
 
   defp deps do
-    #[{:rustler, "~> 0.19"}]
-    [{:rustler, path: "/home/scrogson/github/hansihe/rustler/rustler_mix"}]
+    [{:rustler, "~> 0.21"}]
   end
 end

@@ -10,10 +10,10 @@ defmodule Beamcoin do
     {:ok, resource} = Beamcoin.Server.get_resource()
     :ok = Beamcoin.Native.mine(resource)
 
-    start = System.system_time(:seconds)
+    start = System.system_time(:second)
     receive do
       {:ok, number, hash} ->
-        done = System.system_time(:seconds)
+        done = System.system_time(:second)
         total = done - start
         Logger.info("Solution found in #{total} seconds")
         Logger.info("The number is: #{number}")

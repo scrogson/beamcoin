@@ -22,6 +22,11 @@ enum Message {
     Mine(Pid),
 }
 
+pub fn load<'a>(env: Env<'a>, _: Term<'a>) -> bool {
+    rustler::resource_struct_init!(Channel, env);
+    true
+}
+
 pub fn start<'a>(caller: Env<'a>, _args: &[Term<'a>]) -> Result<Term<'a>, Error> {
     let (tx, rx) = mpsc::channel::<Message>();
 

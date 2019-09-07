@@ -1,4 +1,4 @@
-use rustler::{Env, Term};
+use rustler::Term; // Required to be in scope for the export macro.
 
 mod atoms;
 mod miner;
@@ -10,10 +10,5 @@ rustler::rustler_export_nifs! {
         ("mine", 1, miner::mine),
         ("stop", 1, miner::stop)
     ],
-    Some(load)
-}
-
-fn load<'a>(env: Env<'a>, _: Term<'a>) -> bool {
-    rustler::resource_struct_init!(miner::Channel, env);
-    true
+    Some(miner::load)
 }

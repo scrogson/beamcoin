@@ -20,7 +20,7 @@ defmodule Beamcoin.Server do
     {:ok, nil}
   end
 
-  def terminate(reason, _) do
+  def terminate(_reason, _) do
     with {:ok, resource} <- get_resource() do
       :ets.delete(Beamcoin, Beamcoin)
       Beamcoin.Native.stop(resource)
