@@ -1,4 +1,4 @@
-rustler::rustler_atoms! {
-    atom ok;
-    atom error;
+rustler::atoms! {
+    ok,
+    error,
 }

@@ -1,6 +1,6 @@
 use crate::atoms;
 use mpsc::{Receiver, Sender};
-use rustler::{Encoder, Env, Error, OwnedEnv, Pid, ResourceArc, Term};
+use rustler::{Atom, Encoder, Env, Error, LocalPid, OwnedEnv, ResourceArc, Term};
 use scoped_pool::Pool;
 use sha2::Digest;
 use std::mem;
@@ -16,39 +16,40 @@ lazy_static::lazy_static! {
 #[derive(Debug)]
 struct Solution(u64, String);
 
-pub(crate) struct Channel(Mutex<Sender<Message>>);
+pub struct Channel(Mutex<Sender<Message>>);
 
 enum Message {
-    Mine(Pid),
+    Mine(LocalPid),
 }
 
-pub fn load<'a>(env: Env<'a>, _: Term<'a>) -> bool {
-    rustler::resource_struct_init!(Channel, env);
+pub fn load(env: Env, _: Term) -> bool {
+    rustler::resource!(Channel, env);
     true
 }
 
-pub fn start<'a>(caller: Env<'a>, _args: &[Term<'a>]) -> Result<Term<'a>, Error> {
+#[rustler::nif]
+pub fn start() -> Result<(Atom, ResourceArc<Channel>), Error> {
     let (tx, rx) = mpsc::channel::<Message>();
 
     std::thread::spawn(move || thread_pool(rx));
 
     let resource = ResourceArc::new(Channel(Mutex::new(tx)));
-    Ok((atoms::ok(), resource).encode(caller))
+    Ok((atoms::ok(), resource))
 }
 
-pub fn mine<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
-    let resource: ResourceArc<Channel> = args[0].decode()?;
+#[rustler::nif]
+pub fn mine(env: Env, resource: ResourceArc<Channel>) -> Result<Atom, Error> {
     let lock = resource.0.lock().unwrap();
     lock.send(Message::Mine(env.pid())).unwrap();
 
-    Ok(atoms::ok().encode(env))
+    Ok(atoms::ok())
 }
 
-pub fn stop<'a>(env: Env<'a>, args: &[Term<'a>]) -> Result<Term<'a>, Error> {
-    let resource: ResourceArc<Channel> = args[0].decode()?;
+#[rustler::nif]
+pub fn stop(resource: ResourceArc<Channel>) -> Result<Atom, Error> {
     drop(resource);
 
-    Ok(atoms::ok().encode(env))
+    Ok(atoms::ok())
 }
 
 fn thread_pool(mailbox: Receiver<Message>) {

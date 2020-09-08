@@ -12,6 +12,6 @@ crate-type = ["cdylib"]
 [dependencies]
 lazy_static = "1.2"
 num_cpus = "1.0"
-rustler = "~0.21"
+rustler = "0.22.0-rc"
 scoped-pool = "1.0.0"
 sha2 = "0.7"
